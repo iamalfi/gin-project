@@ -35,7 +35,7 @@ func CreateUser(c *gin.Context) {
 		c.Error(helper.New(http.StatusBadRequest, "Failed to create user", err))
 		return
 	}
-
+	user.Password = ""
 	c.JSON(http.StatusCreated, gin.H{
 		"message": "User created successfully",
 		"user":    user,

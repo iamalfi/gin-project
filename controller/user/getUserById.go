@@ -20,7 +20,7 @@ func GetUserByID(c *gin.Context) {
 		c.Error(helper.New(http.StatusNotFound, "User Not Found", err))
 		return
 	}
-
+	user.Password = ""
 	c.JSON(http.StatusOK, gin.H{
 		"message": "User fetched successfully",
 		"user":    user,

@@ -16,18 +16,12 @@ func UpdateUser(c *gin.Context) {
 		c.Error(helper.New(http.StatusNotFound, "User not found", err))
 	}
 
-	var input model.User
-	if err := c.ShouldBindJSON(&input); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-	}
-
-	user.Name = input.Name
-	user.Email = input.Email
+	c.Bind(&user)
 
 	if err := database.DB.Table("users").Save(user).Error; err != nil {
 		c.Error(helper.New(http.StatusInternalServerError, "Failed to update user", err))
 	}
-
+	user.Password = ""
 	c.JSON(http.StatusOK, gin.H{
 		"message": "User updated successfully",
 		"user":    user,

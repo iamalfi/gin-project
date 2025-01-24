@@ -59,21 +59,27 @@ func AuthMiddleware(requiredRoles ...Role) gin.HandlerFunc {
 
 		c.Set("id", userID)
 
-		userRole, ok := claims["role"].(string)
-		if !ok {
-			c.JSON(http.StatusForbidden, gin.H{"error": "Role not found in token"})
-			c.Abort()
-			return
-		}
-
-		for _, role := range requiredRoles {
-			if userRole == string(role) {
-				c.Next()
+		// Check if roles are required
+		if len(requiredRoles) > 0 {
+			userRole, ok := claims["role"].(string)
+			if !ok {
+				c.JSON(http.StatusForbidden, gin.H{"error": "Role not found in token"})
+				c.Abort()
 				return
 			}
-		}
 
-		c.JSON(http.StatusForbidden, gin.H{"error": "You do not have access to this resource"})
-		c.Abort()
+			for _, role := range requiredRoles {
+				if userRole == string(role) {
+					c.Next()
+					return
+				}
+			}
+
+			c.JSON(http.StatusForbidden, gin.H{"error": "You do not have access to this resource"})
+			c.Abort()
+		} else {
+			// No roles required, just pass the middleware
+			c.Next()
+		}
 	}
 }

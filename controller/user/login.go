@@ -39,6 +39,7 @@ func LoginUser(c *gin.Context) {
 
 		return
 	}
+	user.Password = ""
 	c.JSON(http.StatusOK, gin.H{
 		"message": "Login successful",
 		"token":   token,

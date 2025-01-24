@@ -16,7 +16,9 @@ func GetUsers(c *gin.Context) {
 
 		return
 	}
-
+	for i := range users {
+		users[i].Password = ""
+	}
 	c.JSON(http.StatusOK, gin.H{
 		"message": "Users fetched successfully",
 		"user":    users,

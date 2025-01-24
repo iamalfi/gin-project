@@ -1,6 +1,5 @@
 # Ignore environment variable files
 *.env
-*.env.local
 
 # Ignore temporary files and directories
 *tmp/
