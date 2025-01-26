@@ -29,7 +29,11 @@ func main() {
 
 	api := r.Group("/api")
 	routes.Routes(api)
-
+	r.GET("/", func(c *gin.Context) {
+		c.JSON(200, gin.H{
+			"message": "Welcome to the Gin server!",
+		})
+	})
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8080"
